@@ -52,7 +52,7 @@ let chFont;
 
 
 function preload(){
-mic= loadSound("noise.mp3");
+
 light=loadImage("light.jpg");
 dark=loadImage("dark.jpg");
 enFont=loadFont('Font/Menlo-Regular.ttf');
@@ -64,11 +64,13 @@ chFont=loadFont("Font/I.BMing-3.500.ttf");
 
 function setup() {
 
-	
+	mic= loadSound("noise.mp3");
 	createCanvas(windowWidth, windowHeight);
 	
 	historygram = createGraphics(windowWidth*5,height);
-	mic.play();
+
+	//mouseClicked(togglePlay);
+	//mic.play();
 	fft = new p5.FFT(0.0, 8192);
 	mic.connect(fft);
 
@@ -82,16 +84,8 @@ function setup() {
 
 
 function draw() {
-	background(dark);
-	Counter+=0.002;
-	for (let j=0; j<height; j+=Unit) {
-   for (let i=0; i<width; i+=Unit) {
-	 DrawRect(i, j, Unit);
-		   
-   }
- }
-   
 
+	background(dark);
 
 
 	vx=vx+5;
@@ -101,47 +95,26 @@ function draw() {
 	
 	spectrum = fft.analyze();
 	
-
-
-	//DRAW HISTORYGRAM
-	//TRANSLATE
-	
-	
-	//historygram.image(historygram, -2,0);
-	
-	//historygram.translate(5-x,0);
 	for (let i = maxFreq; i >= minFreq; i--) {
-	 //historygram.translate(5-x,0);
+
 		let index = i - minFreq;
-		let intensity = (spectrum[i] - spectrum[400])*2  ;
+		let intensity = (spectrum[i] - spectrum[500])*3  ;
 		
-		if(intensity>220){
+		if(intensity>150){
 		historygram.stroke(255-intensity,255-intensity,255-intensity);
 
-		if(frameCount==100){
-			console.log(vx);
-		}
-
-		
-	//	var weight = map(intensity,0,255,0.5,2);
-	//	historygram.strokeWeight(weight);
 		let y = index / (maxFreq - minFreq - 1) * height;
-		//historygram.line(600+x,y, 603+x,y); // right to left
-	// historygram.line(600+x,y+2, 600+x,y); // vertical
-	// historygram.line(width+x,y+2, width+x,y); // right to left	
+	
+		historygram.line(vx-2,y, vx,y);
+		historygram.line(vx,y+1, vx+1,y); //1 
+	//	historygram.line(vx,y, vx+2,y);
 		
-		historygram.line(vx-3,y, vx,y);
-		historygram.line(vx,y+2, vx,y); //1 
-		historygram.line(vx,y, vx+2,y);
 		
-		//historygram.fill(255-intensity,255-intensity,255-intensity,intensity/4);
-		//historygram.rect(vx,y,1,3);
 	}
 	}
 
 	image(historygram, windowWidth-vx,0);
-//	x= x -2;
-	//drawStreak();
+
 	
 	
 
@@ -235,6 +208,20 @@ function DrawRect(x, y, size){
 	   }
 	 }
    }
+   
+
+
+
+  function mousePressed() {
+	if (mic.isPlaying()) {
+	  // .isPlaying() returns a boolean
+	  mic.stop();
+	} else {
+	  mic.play();
+	  mic.amp(1);
+	}
+  }
+  
    
    
 
