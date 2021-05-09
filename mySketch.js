@@ -2,6 +2,10 @@
 let dialog1;
 let dialog2;
 
+// cloud image
+let cloud1;
+let cloud1img;
+
 
 //background
 var Unit;
@@ -62,6 +66,7 @@ light=loadImage("light.jpg");
 dark=loadImage("dark.jpg");
 enFont=loadFont('Font/Menlo-Regular.ttf');
 chFont=loadFont("Font/I.BMing-3.500.ttf");
+cloud1img = loadImage("cloud1.png");
 	
 //Shader
 
@@ -88,6 +93,9 @@ function setup() {
 	//dialog
 	dialog1 = new Dialog(windowWidth,windowHeight/2,"text 1 placeholer",5,1500,false);
 	dialog2 = new Dialog(windowWidth,windowHeight/3,"text 2 placeholer",7,6000,false);
+
+	//cloud image
+	cloud1 = new Cloud(1.5*windowWidth,windowHeight/5,cloud1img);
 
 
 	
@@ -133,7 +141,7 @@ function draw() {
 
 	
 	
-	setInterval(drawStreak,5000);
+	
 	
 	//if(frameCount%40==0){
 	//drawStreak();}
@@ -186,6 +194,9 @@ function draw() {
 		//console.log(dialog1.isDisplayed);
 		dialog2.move();
 		dialog2.show();
+
+		cloud1.move();
+		cloud1.show();
 		}
 	
 
@@ -209,27 +220,7 @@ function drawStreak() {
 	//copy(img, 0, y, img.width, h, xChange - maxXChange, -maxYChange + y + yChange, img.width, h);
 }
 
-function DrawRect(x, y, size){
-	let cx=x+size/2; 
-	let cy=y+size/2;
-	let n=noise(cx/width, cy/height, mag(cx, cy)/height-Counter);
-	let threshold=map(size, Unit, 4, 0.5, 0.09 );
-		if (abs(n-0.5)>threshold) {
-	   rect(x, y, size, size);
-	   fill(205,207,195);
-	   noStroke();
-	 } else {
-	   size=size/2;
-	   if (size>=4) { // smallest size of a square = 4pixels
-		 DrawRect(x     , y     , size);
-		 DrawRect(x+size, y     , size);
-		 DrawRect(x     , y+size, size);
-		 DrawRect(x+size, y+size, size);
-		fill(205,207,195);
-		noStroke();
-	   }
-	 }
-   }
+
    
 
 
@@ -288,4 +279,19 @@ class Dialog{
 		text(this.text,this.x,this.y);
 	}
 }
+
+class Cloud{
+	constructor(x,y,img){
+		this.x = x;
+		this.y = y;
+		this.img = img;
+	}
+	move(){
+		this.x = this.x - 5;
+	}
+	show(){
+		image(this.img,this.x,this.y,this.img.width/2,this.img.height/2);
+	}
+}
+
 
