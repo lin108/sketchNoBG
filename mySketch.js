@@ -19,6 +19,7 @@ var vx =0;
 
 let light;
 let dark;
+let mix;
 
 let theShader;
 let WebglGraphics;
@@ -64,6 +65,7 @@ function preload(){
 
 light=loadImage("light.jpg");
 dark=loadImage("dark.jpg");
+mix = loadImage("background.jpg");
 enFont=loadFont('Font/Menlo-Regular.ttf');
 chFont=loadFont("Font/I.BMing-3.500.ttf");
 cloud1img = loadImage("cloud1.png");
@@ -105,7 +107,7 @@ function setup() {
 function draw() {
 
 
-	background(dark);
+	background(mix);
 
 
 	vx=vx+5;
