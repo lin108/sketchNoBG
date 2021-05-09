@@ -86,8 +86,8 @@ function setup() {
 
 
 	//dialog
-	dialog1 = new Dialog(windowWidth,windowHeight/2,"text 1 placeholer",5,1500,false);
-	dialog2 = new Dialog(windowWidth,windowHeight/3,"text 2 placeholer",7,6000,false);
+	dialog1 = new Dialog(2*windowWidth/3,windowHeight/2,"text 1 placeholer",5,3500,false);
+	dialog2 = new Dialog(windowWidth/2,windowHeight/3,"text 2 placeholer",7,8000,false);
 
 
 	
@@ -133,10 +133,10 @@ function draw() {
 
 	
 	
-	setInterval(drawStreak,5000);
+
 	
-	//if(frameCount%40==0){
-	//drawStreak();}
+	if(frameCount%40==0){
+	drawStreak();}
 
 	
 		// info text
@@ -257,6 +257,7 @@ class Dialog{
 		this.text = text;
 		this.isDisplayed =isDisplayed;
 		setTimeout(() => {this.display(true)},time); //匿名函数
+		setTimeout(() => {this.remove(false)},time+3000); //匿名函数
 	//	setTimeout(this.display,time);
 
 	}
@@ -268,12 +269,13 @@ class Dialog{
 	}
 
 
+	remove(isDisplayed){
+		this.isDisplayed = isDisplayed;
+	}
+
 	move(){
-		if(this.isDisplayed==false){
-			return;
-		}	
-		this.x = this.x - this.speed;
-		this.y = this.y + random(-1,1);	
+		this.x = this.x +random(-3,3);
+		this.y = this.y + random(-3,3);
 	}
 
 
