@@ -1,3 +1,5 @@
+let startCanvas;
+
 //shader
 let theShader;
 let Img;
@@ -86,6 +88,9 @@ Img = loadImage('light.jpg');
 
 function setup() {
 
+	startCanvas = createGraphics(windowWidth,windowHeight);
+
+
 	createCanvas(windowWidth, windowHeight);
 	//shader
     WebglCanvas = createGraphics(windowWidth,windowHeight,WEBGL);
@@ -112,13 +117,13 @@ function setup() {
 	dialog1 = new Dialog(windowWidth,windowHeight/2,"33591",5,4500,false);
 	dialog2 = new Dialog(windowWidth,windowHeight/3,"NORAD ID",6,6000,false);
 
-	dialog3 = new DialogP(4*windowWidth/5,100,"訊號連結",chFont,12000,16000,false);
-	dialog4 = new DialogP(4*windowWidth/5,200,"WEATHER/SNOOZE",enFont,13000,16000,false);
-	dialog5 = new DialogP(windowWidth/3,windowHeight/3,"Int'I Code 2009-005A",enFont,20000,24000,false);
+	dialog3 = new DialogP(4*windowWidth/5,100,"訊號連結",chFont,16000,20000,false);
+	dialog4 = new DialogP(4*windowWidth/5,200,"WEATHER/SNOOZE",enFont,17000,20000,false);
+	dialog5 = new DialogP(windowWidth/3,3*windowHeight/4,"Int'I Code 2009-005A",enFont,25000,29000,false);
 	
 
 	//cloud image
-	cloud1 = new Cloud(3.5*windowWidth,windowHeight/5,cloud1img);
+	cloud1 = new Cloud(2*windowWidth,windowHeight/5,cloud1img);
 
 
 	
@@ -126,6 +131,8 @@ function setup() {
 
 
 function draw() {
+	
+
 
 	//shader 
 	WebglCanvas.shader(theShader);
@@ -137,6 +144,11 @@ function draw() {
 		image(WebglCanvas,0,0);	
   
   
+	startCanvas.textSize(16);
+	startCanvas.textFont(enFont);
+	startCanvas.text("press any key to start",20,50);
+	startCanvas.fill(100);
+	image(startCanvas,0,0);
 	
 
 	//historygram.clear(0,0,width,height);
@@ -250,7 +262,8 @@ function draw() {
 
 
 
-  function mousePressed() {
+  function keyPressed() {
+
 	if (mic.isPlaying()) {
 	  // .isPlaying() returns a boolean
 	  mic.stop();
