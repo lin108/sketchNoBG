@@ -109,16 +109,16 @@ function setup() {
 
 
 	//dialog
-	dialog1 = new Dialog(windowWidth,windowHeight/2,"33591",5,2500,false);
-	dialog2 = new Dialog(windowWidth,windowHeight/3,"NORAD ID",6,5000,false);
+	dialog1 = new Dialog(windowWidth,windowHeight/2,"33591",5,4500,false);
+	dialog2 = new Dialog(windowWidth,windowHeight/3,"NORAD ID",6,6000,false);
 
-	dialog3 = new DialogP(2*windowWidth/3,windowHeight/4,"訊號連結",chFont,8000,13000,false);
-	dialog4 = new DialogP(2*windowWidth/3,windowHeight/3,"WEATHER/SNOOZE",enFont,9000,13000,false);
-	dialog5 = new DialogP(windowWidth/3,windowHeight/3,"Int'I Code 2009-005A",enFont,13000,16000,false);
+	dialog3 = new DialogP(4*windowWidth/5,100,"訊號連結",chFont,12000,16000,false);
+	dialog4 = new DialogP(4*windowWidth/5,200,"WEATHER/SNOOZE",enFont,13000,16000,false);
+	dialog5 = new DialogP(windowWidth/3,windowHeight/3,"Int'I Code 2009-005A",enFont,20000,24000,false);
 	
 
 	//cloud image
-	cloud1 = new Cloud(4*windowWidth,windowHeight/5,cloud1img);
+	cloud1 = new Cloud(3.5*windowWidth,windowHeight/5,cloud1img);
 
 
 	
