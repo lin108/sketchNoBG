@@ -8,8 +8,8 @@ let WebglCanvas;
 
 //text
 let scriptCanvas;
-let dialogM = [];
-let dialog1,dialog2,dialog3,dialog4,dialog5,dialog6,dialog7,dialog8,dialog9,dialog10,dialog11,dialog12,dialog13;
+let dialogp = []; //popup
+let dialogs = []; //move
 
 
 
@@ -92,22 +92,22 @@ function setup() {
 
 	
 	//dialog移动效果 （出现x，出现y，内容，移动速度，出现时间，false）
-	dialog1 = new Dialog(windowWidth,windowHeight/2,"33591",5,4500,false);
-	dialog2 = new Dialog(windowWidth,windowHeight/3,"NORAD ID",6,6000,false);
-	dialog6 = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
-	dialog7 = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
-	dialog8 = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
+	dialogs[0] = new Dialog(windowWidth,windowHeight/2,"33591",5,4500,false);
+	dialogs[1] = new Dialog(windowWidth,windowHeight/3,"NORAD ID",6,6000,false);
+	dialogs[2] = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
+	dialogs[3] = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
+	dialogs[4] = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
 
 
 	//dialog popup效果 （x，y，内容，字体，出现时间，消失时间，false）
-	dialog3 = new DialogP(4*windowWidth/5,100,"訊號連結",chFont,16000,18000,false);
-	dialog4 = new DialogP(4*windowWidth/5,200,"WEATHER/SNOOZE",enFont,17000,19000,false);
-	dialog5 = new DialogP(windowWidth/3,3*windowHeight/4,"Int'I Code 2009-005A",enFont,25000,27000,false);
-	dialog9 = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
-	dialog10 = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
-	dialog11 = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
-	dialog12 = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
-	dialog13 = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialogp[0] = new DialogP(4*windowWidth/5,100,"訊號連結",chFont,16000,18000,false);
+	dialogp[1] = new DialogP(4*windowWidth/5,200,"WEATHER/SNOOZE",enFont,17000,19000,false);
+	dialogp[2] = new DialogP(windowWidth/3,3*windowHeight/4,"Int'I Code 2009-005A",enFont,25000,27000,false);
+	dialogp[3] = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialogp[4] = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialogp[5] = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialogp[6] = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialogp[7] = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
 
 
 
@@ -216,6 +216,18 @@ function draw() {
 
   function script(){
 	if (mic.isPlaying()){
+		for(i=0;i<2;i++) {
+			dialogs[i].move();
+			dialogs[i].show();
+		}
+		for(z=0;z<7;z++) {
+		
+			dialogp[z].show();
+		}
+
+
+
+/*
 		dialog1.move();
 		dialog1.show();
 		//console.log(dialog1.isDisplayed);
@@ -232,6 +244,7 @@ function draw() {
 
 		cloud1.move();
 		cloud1.show();
+		*/
 		}
   }
    
