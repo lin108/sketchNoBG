@@ -7,38 +7,28 @@ let WebglCanvas;
 
 
 //text
-let dialog1;
-let dialog2;
-let dialog3;
-let dialog4;
-let dialog5;
+let scriptCanvas;
+let dialogM = [];
+let dialog1,dialog2,dialog3,dialog4,dialog5,dialog6,dialog7,dialog8,dialog9,dialog10,dialog11,dialog12,dialog13;
+
+
+
+
+
 
 // cloud image
 let cloud1;
 let cloud1img;
 
 
-//background
-var Unit;
-var Counter;
-var MX, MY;
-var x,y,size;
-
 
 
 var vx =0;
-
-let light;
-let dark;
-let mix;
-
-
-
 let info=[];
 
-//var x = 0;
-let bg;
 
+
+//glitch
 const maxXChange = 125;
 const maxYChange = 5;
 const yNoiseChange = 0.01;
@@ -46,8 +36,6 @@ const mouseYNoiseChange = 0.3;
 const timeNoiseChange = 0.013;
 
 let inverted = false;
-
-
 
 const micSampleRate = 44100;
 
@@ -73,22 +61,22 @@ let chFont;
 
 
 function preload(){
-
-mix = loadImage("background.jpg");
-enFont=loadFont('Font/Menlo-Regular.ttf');
-chFont=loadFont("Font/I.BMing-3.500.ttf");
-cloud1img = loadImage("cloud1.png");
-	
-//Shader
-theShader = loadShader('shader1.vert', 'shader1.frag');
-Img = loadImage('light.jpg');
-
+	enFont=loadFont('Font/Menlo-Regular.ttf');
+	chFont=loadFont("Font/I.BMing-3.500.ttf");
+	cloud1img = loadImage("cloud1.png");
+		
+	//Shader
+	theShader = loadShader('shader1.vert', 'shader1.frag');
+	Img = loadImage('light.jpg');
 
 }
+
 
 function setup() {
 
 	startCanvas = createGraphics(windowWidth,windowHeight);
+	scriptCanvas = createGraphics(windowWidth,windowHeight);
+	scriptCanvas.clear();
 
 
 	createCanvas(windowWidth, windowHeight);
@@ -98,29 +86,30 @@ function setup() {
 	noStroke();
     
 	mic= loadSound("noise.mp3");
-	
-	
 	historygram = createGraphics(windowWidth*5,height);
-
-	//mouseClicked(togglePlay);
-	//mic.play();
 	fft = new p5.FFT(0.0, 8192);
-	//fft = new p5.FFT(0.0, 1024);
-	//mic.connect(fft);
-
-	// bg	
-	Unit=128;
-	Counter=0;
 
 
-	//dialog
+	
+	//dialog移动效果 （出现x，出现y，内容，移动速度，出现时间，false）
 	dialog1 = new Dialog(windowWidth,windowHeight/2,"33591",5,4500,false);
 	dialog2 = new Dialog(windowWidth,windowHeight/3,"NORAD ID",6,6000,false);
+	dialog6 = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
+	dialog7 = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
+	dialog8 = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
 
-	dialog3 = new DialogP(4*windowWidth/5,100,"訊號連結",chFont,16000,20000,false);
-	dialog4 = new DialogP(4*windowWidth/5,200,"WEATHER/SNOOZE",enFont,17000,20000,false);
-	dialog5 = new DialogP(windowWidth/3,3*windowHeight/4,"Int'I Code 2009-005A",enFont,25000,29000,false);
-	
+
+	//dialog popup效果 （x，y，内容，字体，出现时间，消失时间，false）
+	dialog3 = new DialogP(4*windowWidth/5,100,"訊號連結",chFont,16000,18000,false);
+	dialog4 = new DialogP(4*windowWidth/5,200,"WEATHER/SNOOZE",enFont,17000,19000,false);
+	dialog5 = new DialogP(windowWidth/3,3*windowHeight/4,"Int'I Code 2009-005A",enFont,25000,27000,false);
+	dialog9 = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialog10 = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialog11 = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialog12 = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialog13 = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+
+
 
 	//cloud image
 	cloud1 = new Cloud(2*windowWidth,windowHeight/5,cloud1img);
@@ -130,10 +119,10 @@ function setup() {
 }
 
 
+
 function draw() {
 	
-
-
+	
 	//shader 
 	WebglCanvas.shader(theShader);
 	theShader.setUniform("iResolution", [width, height]);
@@ -148,18 +137,14 @@ function draw() {
 	startCanvas.textFont(enFont);
 	startCanvas.text("press any key to start",20,50);
 	startCanvas.fill(100);
-	image(startCanvas,0,0);
+	//image(startCanvas,0,0);
+
+	image(scriptCanvas,0,0);
 	
-
-	//historygram.clear(0,0,width,height);
-	//background(mix);
-
 
 	vx=vx+5;
 	
-	
 
-	
 	spectrum = fft.analyze();
 	
 	for (let i = maxFreq; i >= minFreq; i--) {
@@ -167,9 +152,6 @@ function draw() {
 		let index = i - minFreq;
 		let intensity = (spectrum[i] - spectrum[500])*3  ;
 
-		if(frameCount%40==0){
-			console.log(spectrum[500]);
-		}
 		
 		if(intensity>150){
 		historygram.stroke(255-intensity,255-intensity,255-intensity);
@@ -178,20 +160,13 @@ function draw() {
 	
 		historygram.line(vx-2,y, vx,y);
 		historygram.line(vx,y+1, vx+1,y); //1 
-	//	historygram.line(vx,y, vx+2,y);
-		
 		
 	}
 	}
 
 	image(historygram, windowWidth-vx,0);
 
-	
-	
-	
-	
-	//if(frameCount%40==0){
-	//drawStreak();}
+
 
 	
 		// info text
@@ -216,49 +191,13 @@ function draw() {
 		fill(255);
 
 
-
-		
-/*
-		//info DOM
-		let h1 = createElement("h1","2020-12-30--10-12-11--593_pX.fots" );
-		h1.style('color','white');
-		h1.style('font-size','18px');
-		h1.style('font-family','Menlo-Regular');
-		h1.position(1/25*width,7/10*height);
-
-
-		let h2 = createElement("h2","age:2s" );
-		h1.style('color','white');
-		h1.style('font-size','18px');
-		h1.style('font-family','Menlo-Regular');
-		h1.position(1/25*width,8/10*height);
-*/	
-		//dialog
-		
-		if (mic.isPlaying()){
-		dialog1.move();
-		dialog1.show();
-		//console.log(dialog1.isDisplayed);
-		dialog2.move();
-		dialog2.show();
-
-		
-		dialog3.show();
-		dialog4.show();
-		dialog5.show();
-
-		cloud1.move();
-		cloud1.show();
-		}
 	
-
+	script();
 
 }
 
 
 
-
-   
 
 
 
@@ -274,94 +213,25 @@ function draw() {
 
   }
   
-   
-   
-// move class
-class Dialog{
-	
-	constructor(x,y,text,speed,time,isDisplayed){
-		this.x = x;
-		this.y = y;
-		this.speed = speed;
-		this.text = text;
-		this.isDisplayed =isDisplayed;
-		setTimeout(() => {this.display(true)},time); //匿名函数
-	//	setTimeout(this.display,time);
 
-	}
+  function script(){
+	if (mic.isPlaying()){
+		dialog1.move();
+		dialog1.show();
+		//console.log(dialog1.isDisplayed);
+		dialog2.move();
+		dialog2.show();
 
- 	 display(isDisplayed){
-		console.log('hihihihihihihi');
-		console.log(this.time);
-		this.isDisplayed = isDisplayed;
-	}
-
-
-	move(){
-		if(this.isDisplayed==false){
-			return;
-		}	
-		this.x = this.x - this.speed;
-		this.y = this.y + random(-1,1);	
-	}
-
-
-	show(){
-		if(this.isDisplayed==false){
-			return;
-		}
 		
-		textSize(18);
-		//textFont(enFont);
-		fill(255);
-		text(this.text,this.x,this.y);
-	}
-}
+		dialog3.show();
+		//dialog3.blur();
+		dialog4.show();
+		//dialog4.blur();
+		dialog5.show();
+		//dialog5.blur();
 
-
-//popup class
-class DialogP{
-	constructor(x,y,text,font,borntime,deadtime,isDisplayed){
-		this.x=x;
-		this.y=y;
-		this.text =text;
-		this.font = font;
-		this.isDisplayed = isDisplayed;
-		setTimeout(() => {this.display(true)},borntime); //匿名函数
-		setTimeout(() => {this.remove(false)},deadtime); //匿名函数
-	}
-	display(isDisplayed){
-		this.isDisplayed = isDisplayed;
-	}
-	remove(isDisplayed){
-		this.isDisplayed = isDisplayed;
-	}
-	show(){
-		if(this.isDisplayed==false){
-			return;
+		cloud1.move();
+		cloud1.show();
 		}
-		
-		textSize(18);
-		textFont(this.font);
-		fill(255);
-		text(this.text,this.x,this.y);
-	}
-}
-
-
-
-class Cloud{
-	constructor(x,y,img){
-		this.x = x;
-		this.y = y;
-		this.img = img;
-	}
-	move(){
-		this.x = this.x - 5;
-	}
-	show(){
-		image(this.img,this.x,this.y,this.img.width/2,this.img.height/2);
-	}
-}
-
-
+  }
+   
