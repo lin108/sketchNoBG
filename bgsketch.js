@@ -42,7 +42,7 @@ const micSampleRate = 44100;
 const freqDefinition = 8192;
 
 
-const minFreqHz = 530;//C3
+const minFreqHz = 400;//C3
 const maxFreqHz = 3103;//C7
 const minFreq = Math.floor(minFreqHz/2/1.445);//2/1.445 is a magic number to convert Hz to MIC frequency, dont know why...
 const maxFreq = Math.floor(maxFreqHz/2/1.445);//2/1.445 is a magic number to convert Hz to MIC frequency, dont know why...
@@ -85,7 +85,7 @@ function setup() {
 	pixelDensity(1);
 	noStroke();
     
-	mic= loadSound("noise.mp3");
+	mic= loadSound("noise1.mp3");
 	historygram = createGraphics(windowWidth*5,height);
 	fft = new p5.FFT(0.0, 8192);
 
@@ -144,27 +144,33 @@ function draw() {
 
 	vx=vx+5;
 	
-
 	spectrum = fft.analyze();
 	
+	
 	for (let i = maxFreq; i >= minFreq; i--) {
+		
+		var high = fft.getEnergy(2400);
 
-		let index = i - minFreq;
+		//let index = i - minFreq;
+		let index = maxFreq - i;
 		let intensity = (spectrum[i] - spectrum[500])*3  ;
 
 		
 		if(intensity>150){
 		historygram.stroke(255-intensity,255-intensity,255-intensity);
 
-		let y = index / (maxFreq - minFreq - 1) * height;
+		let y = index / (maxFreq - minFreq - 1) * height/2;
 	
 		historygram.line(vx-2,y, vx,y);
-		historygram.line(vx,y+1, vx+1,y); //1 
+		historygram.line(vx,y+3, vx+1,y); //1 
 		
 	}
 	}
 
+
+
 	image(historygram, windowWidth-vx,0);
+	image(historygram, windowWidth-vx,height/2);
 
 
 
