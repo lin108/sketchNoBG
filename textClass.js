@@ -42,10 +42,13 @@ class Dialog{
         text(this.text,this.x,this.y);
 
 		textSize(18);
-		fill(255,60);
+		fill(255,80);
         text(this.text,this.x+5,this.y);
 		text(this.text,this.x+10,this.y);
+		textSize(18);
+		fill(255,60);
 		text(this.text,this.x+15,this.y);
+		text(this.text,this.x+20,this.y);
       
 	}
 }
@@ -86,6 +89,8 @@ class DialogP{
 		//this.x = this.x + random(-1,1);	
 		
 		text(this.text,this.x,this.y);
+		text(this.text,this.x+10,this.y-10);
+		text(this.text,this.x-10,this.y+10);
 	
 	}
 	

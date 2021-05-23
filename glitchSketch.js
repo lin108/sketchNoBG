@@ -94,20 +94,20 @@ function setup() {
 	//dialog移动效果 （出现x，出现y，内容，移动速度，出现时间，false）
 	dialogs[0] = new Dialog(windowWidth,windowHeight/2,"33591",5,4500,false);
 	dialogs[1] = new Dialog(windowWidth,windowHeight/3,"NORAD ID",6,6000,false);
-	dialogs[2] = new Dialog(windowWidth,2*windowHeight/3,"137.100/1698.000 ",5,27000,false);
-	dialogs[3] = new Dialog(windowWidth,2*windowHeight/3-100," LAT: 6",5,28000,false);
-	dialogs[4] = new Dialog(windowWidth,windowHeight/3,"SPD: 7.2 ",5,29000,false);
+	dialogs[2] = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
+	dialogs[3] = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
+	dialogs[4] = new Dialog(windowWidth,windowHeight/3," ",5,6000,false);
 
 
 	//dialog popup效果 （x，y，内容，字体，出现时间，消失时间，false）
-	dialogp[0] = new DialogP(3*windowWidth/5,100,"訊號連結",chFont,13000,16000,false);
-	dialogp[1] = new DialogP(4*windowWidth/5,200,"WEATHER/SNOOZE",enFont,15000,17000,false);
-	dialogp[2] = new DialogP(windowWidth/3,2*windowHeight/4,"Int'I Code 2009-005A",enFont,17000,20000,false);
-	dialogp[3] = new DialogP(windowWidth/2,windowHeight/2,"訊號連結 ",chFont,21000,24000,false);
-	dialogp[4] = new DialogP(windowWidth/5,3*windowHeight/4,"AZIMUTH ",enFont,25000,27000,false);
-	dialogp[5] = new DialogP(windowWidth/2,2*windowHeight/4," [發送信息：機器型號]",chFont,30000,33000,false);
-	dialogp[6] = new DialogP(windowWidth/3,3*windowHeight/4," ……[訊號接通]",chFont,32000,36000,false);
-	dialogp[7] = new DialogP(windowWidth/2,1*windowHeight/4," 是誰？",chFont,36000,43000,false);
+	dialogp[0] = new DialogP(4*windowWidth/5,100,"訊號連結",chFont,16000,18000,false);
+	dialogp[1] = new DialogP(4*windowWidth/5,200,"WEATHER/SNOOZE",enFont,17000,19000,false);
+	dialogp[2] = new DialogP(windowWidth/3,3*windowHeight/4,"Int'I Code 2009-005A",enFont,25000,27000,false);
+	dialogp[3] = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialogp[4] = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialogp[5] = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialogp[6] = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
+	dialogp[7] = new DialogP(windowWidth/3,3*windowHeight/4," ",enFont,25000,27000,false);
 
 
 
@@ -171,6 +171,7 @@ function draw() {
 
 	image(historygram, windowWidth-vx,0);
 	image(historygram, windowWidth-vx,height/2);
+	//glitch1();
 
 
 
@@ -200,6 +201,7 @@ function draw() {
 	
 	script();
 
+
 }
 
 
@@ -215,7 +217,6 @@ function draw() {
 	} else {
 	  mic.play();
 	  mic.amp(1);
-	 // mic.loop();
 	}
 
   }
@@ -223,14 +224,16 @@ function draw() {
 
   function script(){
 	if (mic.isPlaying()){
-		for(i=0;i<5;i++) {
+		for(i=0;i<2;i++) {
 			dialogs[i].move();
 			dialogs[i].show();
 		}
-		for(z=0;z<8;z++) {
+		for(z=0;z<7;z++) {
 		
 			dialogp[z].show();
 		}
+
+ 
 
 
 
@@ -253,5 +256,32 @@ function draw() {
 		cloud1.show();
 		*/
 		}
+  }
+
+
+  function glitch1(){
+
+	for(var o=0;o<height;o++){
+		let row = [];
+		
+		for(var i=0;i<width;i++){
+
+			let c = historygram.get(i,o);
+			row.push(c);
+			// if (i==0){
+				// console.log(c);
+			// }
+		}
+		row.sort((a,b)=>(  ( (a[0]+a[1]+a[2])* (random(0,0.5) + frameCount/1000)>b[0]+b[1]+b[2] ) && random(0,1)<30 )?1:-1)
+		
+		for(var i=0;i<width;i++){
+			let c = set(i,o,row[i]);
+			// row.push(c);
+		}
+		
+	}
+	updatePixels();
+	//image(img2,0,0);
+
   }
    
