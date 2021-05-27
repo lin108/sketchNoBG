@@ -4,6 +4,7 @@ let startCanvas;
 let theShader;
 let Img;
 let WebglCanvas;
+let WebglCanvas2;
 
 //glitchjs
 let scriptGlitch;
@@ -67,9 +68,11 @@ function preload(){
 	enFont=loadFont('Font/Menlo-Regular.ttf');
 	chFont=loadFont("Font/I.BMing-3.500.ttf");
 	cloud1img = loadImage("cloud1.png");
-		
+	
+	
+	theShader0 = loadShader('shader1.vert', 'shader1.frag');
 	//Shader
-	theShader = loadShader('shader1.vert', 'shader1.frag');
+	theShader = new p5.Shader(this.renderer,vert,frag);
 	Img = loadImage('light.jpg');
 
 }
@@ -82,12 +85,17 @@ function setup() {
 
 	startCanvas = createGraphics(windowWidth,windowHeight);
 	scriptCanvas = createGraphics(windowWidth,windowHeight);
-	scriptCanvas.clear();
+	pixelDensity(1);
+	noStroke();
 
 
 	createCanvas(windowWidth, windowHeight);
 	//shader
     WebglCanvas = createGraphics(windowWidth,windowHeight,WEBGL);
+	pixelDensity(1);
+	noStroke();
+
+	WebglCanvas2 = createGraphics(windowWidth,windowHeight,WEBGL);
 	pixelDensity(1);
 	noStroke();
     
@@ -102,23 +110,23 @@ function setup() {
 	dialogs[1] = new Dialog(windowWidth,windowHeight/3,"WEATHER/SNOOZE",enFont, "#fff", 16, 15,7000,false);
 	dialogs[0] = new Dialog(windowWidth,windowHeight/2,"訊號連結",chFont, "#fff", 18, 5,9000,false);
 
-	dialogs[2] = new Dialog(windowWidth,2*windowHeight/3,"WEATHER/SNOOZE ",enFont,"#fff", 16,  15,13000,false);
-	dialogs[3] = new Dialog(windowWidth,windowHeight/3-100,"……[訊號接通]",chFont,"#fff", 16, 15,25000,false);
-	dialogs[4] = new Dialog(windowWidth,windowHeight/3,"是誰？",chFont,"#fff", 16, 5,26000,false);
+	dialogs[2] = new Dialog(windowWidth,2*windowHeight/3,"WEATHER/SNOOZE ",enFont,"#fff", 16,  15,15000,false);
+	dialogs[3] = new Dialog(windowWidth,windowHeight/3-100,"……[訊號接通]",chFont,"#fff", 25, 15,30000,false);
+	dialogs[4] = new Dialog(windowWidth,windowHeight/3,"是誰？",chFont,"#fff", 25, 10,45000,false);
 
 
 	//dialog popup效果 （x，y，内容，字体，color，size，出现时间，消失时间，false）
 	dialogp[0] = new DialogP(9*windowWidth/10,windowHeight/2+50,"33591",enFont,"#fff", 16, 4500,5000,false);
 	dialogp[1] = new DialogP(9*windowWidth/10,windowHeight/2-50,"NORAD ID",enFont,"#fff",16,4600,5000,false);
-	dialogp[2] = new DialogP(windowWidth/5,1*windowHeight/4,"Int'I Code 2009-005A",enFont,"#fff",16,10000,12000,false);
+	dialogp[2] = new DialogP(4*windowWidth/5,3*windowHeight/4,"Int'I Code 2009-005A",enFont,"#fff",16,10000,12000,false);
 	dialogp[3] = new DialogP(windowWidth/5,windowHeight/5,"137.100/1698.000  ",enFont,"#fff",16,15000,17000,false);
 	
-	dialogp[4] = new DialogP(4*windowWidth/5,3*windowHeight/4,"LAT: 6 ",enFont,"#fff",16,16000,18000,false);
-	dialogp[5] = new DialogP(4*windowWidth/5,3*windowHeight/4+70,"SPD: 7.2 ",enFont,"#fff",16,18000,20000,false);
+	dialogp[4] = new DialogP(4*windowWidth/5,3*windowHeight/4,"LAT: 6 ",enFont,"#fff",16,20000,23000,false);
+	dialogp[5] = new DialogP(4*windowWidth/5,3*windowHeight/4-30,"SPD: 7.2 ",enFont,"#fff",16,20000,23000,false);
 
-	dialogp[5] = new DialogP(windowWidth/2,windowHeight/4," AZIMUTH",enFont,"#fff",16,27000,30000,false);
-	dialogp[6] = new DialogP(windowWidth/3,windowHeight/4," (不含有明確縮寫可以識別)",chFont,"#fff",25,25000,30000,false);
-	dialogp[7] = new DialogP(windowWidth/2,windowHeight/2-400," 主機時間",chFont,"#fff",20,29000,50000,false);
+	dialogp[5] = new DialogP(windowWidth/2,windowHeight/4," AZIMUTH",enFont,"#fff",16,30000,32000,false);
+	dialogp[6] = new DialogP(windowWidth/5,windowHeight/4+100," (不含有明確縮寫可以識別)",chFont,"#fff",16,40000,50000,false);
+	dialogp[7] = new DialogP(windowWidth/2,windowHeight/2-400," 主機時間",chFont,"#fff",20,46000,55000,false);
 
 
 
@@ -131,17 +139,37 @@ function setup() {
 
 
 function draw() {
+
+
+	
+
+	theShader.setUniform('u_resolution',[width/1000,height/1000])
+	theShader.setUniform('u_time',millis()/1000)
+	theShader.setUniform('u_mouse',[mouseX/width,mouseY/height])
+	theShader.setUniform('tex0',WebglCanvas)
+	WebglCanvas2.shader(theShader)
+	// webGLGraphics2.rect(00,width,height)
+	WebglCanvas2.rect(-width/2,-height/2,width,height)
 	
 	
 	//shader 
-	WebglCanvas.shader(theShader);
-	theShader.setUniform("iResolution", [width, height]);
-	theShader.setUniform("iFrame", frameCount);
-	theShader.setUniform('tex',Img)
+	WebglCanvas.shader(theShader0);
+	theShader0.setUniform("iResolution", [width, height]);
+	theShader0.setUniform("iFrame", frameCount);
+	theShader0.setUniform('tex',Img)
 		// rect gives us some geometry on the screen
 		WebglCanvas.rect(0,0,width, height);
 		image(WebglCanvas,0,0);	
   
+
+
+		if(frameCount%100 > 10 && frameCount%100 <15)
+	{
+		glitch();
+		
+	}
+	
+
   
 	startCanvas.textSize(16);
 	startCanvas.textFont(enFont);
@@ -160,13 +188,13 @@ function draw() {
 		spectrum = fft.analyze();
 
 
-		for (let i = maxFreq; i >= minFreq; i--) {
+		for (let i = maxFreqHz; i >= minFreqHz; i--) {
 			
 			//var high = fft.getEnergy(2400);
 
 			//let index = i - minFreq;
 			let index = maxFreq - i;
-			let intensity = (spectrum[i] - spectrum[500])*2;
+			let intensity = (spectrum[i] - spectrum[1000])*2;
 			let intensityX= map(intensity,0,100,0.5,5);
 			
 
@@ -191,18 +219,19 @@ function draw() {
 	
 
 
+	image(WebglCanvas2,0,0,width,height);
+
+	image(historygram, windowWidth-vx,0);
+	image(historygram, windowWidth-vx,height/2);
+	
 
 
 
-
-		image(historygram, windowWidth-vx,0);
-		image(historygram, windowWidth-vx,height/2);
-
-
+		
 
 	
 		// info text
-		textSize(18);
+		textSize(16);
 		textFont(enFont);
 		fill(255);
 		text("2020-12-30--10-12-11--593_pX.fots",1/25*width,15/20*height);
@@ -223,6 +252,7 @@ function draw() {
 		fill(255);
 
 		//glitch();
+
 	
 	script();
 	image(scriptCanvas,0,0);
@@ -234,17 +264,15 @@ function draw() {
 		scriptCanvas.clear(0,0,width,height);
 	}
 	
-	if(frameCount%100 > 10 && frameCount%100 <15)
-	{
-		glitch();
-		
-	}
-	if(frameCount%100>50 && frameCount%100<70){
+
+	
+	
+
+	if(frameCount%100>80 && frameCount%100<95){
 		glitch1();
 	}
 
-	
-		
+
 }
 
 
@@ -294,9 +322,6 @@ function draw() {
 
 
   function glitch1(){
-	//var x1 = floor(random(2/windowWidth,windowWidth));
-	//var y1 = floor(random(height));
-
 	var x1 = floor(random(windowWidth/2,windowWidth/2 +40));
 	var y1 = floor(random(10,200));
   
@@ -309,11 +334,9 @@ function draw() {
 	var col = get(x1, y1, w, h)
    
 	set(x2, y2, col);
-   
-	
   }
-
 
   function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
   }
+   

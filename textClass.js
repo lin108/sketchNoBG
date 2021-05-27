@@ -3,11 +3,14 @@
 // move class
 class Dialog{
 	
-	constructor(x,y,text,speed,time,isDisplayed){
+	constructor(x,y,text,font, color, size, speed,time,isDisplayed){
 		this.x = x;
 		this.y = y;
-		this.speed = speed;
 		this.text = text;
+		this.font = font;
+		this.color = color;
+		this.size = size;
+		this.speed = speed;
 		this.isDisplayed =isDisplayed;
 		setTimeout(() => {this.display(true)},time); //匿名函数
 	//	setTimeout(this.display,time);
@@ -16,8 +19,8 @@ class Dialog{
 	}
 
  	 display(isDisplayed){
-		console.log('hihihihihihihi');
-		console.log(this.time);
+	//	console.log('hihihihihihihi');
+	//	console.log(this.time);
 		this.isDisplayed = isDisplayed;
 	}
 
@@ -34,22 +37,24 @@ class Dialog{
 			return;
 		}
 
-		textSize(18);
-		//textFont(enFont);
-		fill(255);
+		scriptCanvas.textSize(this.size);
+		scriptCanvas.textFont(this.font);
+		scriptCanvas.fill(this.color);
         this.x = this.x - this.speed;
 		this.y = this.y + random(-1,1);	
-        text(this.text,this.x,this.y);
+        scriptCanvas.text(this.text,this.x,this.y);
 
+		/*
 		textSize(18);
 		fill(255,80);
         text(this.text,this.x+5,this.y);
 		text(this.text,this.x+10,this.y);
+
 		textSize(18);
 		fill(255,60);
 		text(this.text,this.x+15,this.y);
 		text(this.text,this.x+20,this.y);
-      
+      */
 	}
 }
 
@@ -57,11 +62,13 @@ class Dialog{
 
 //popup class
 class DialogP{
-	constructor(x,y,text,font,borntime,deadtime,isDisplayed){
+	constructor(x,y,text,font,color,size,borntime,deadtime,isDisplayed){
 		this.x=x;
 		this.y=y;
 		this.text =text;
 		this.font = font;
+		this.color = color;
+		this.size =size;
 		this.isDisplayed = isDisplayed;
 		this.blur = blur;
 		setTimeout(() => {this.display(true)},borntime); //匿名函数
@@ -82,9 +89,9 @@ class DialogP{
 		if(this.isDisplayed==false){
 			return;
 		}	
-		textSize(18);
+		textSize(this.size);
 		textFont(this.font);
-	    fill(255);
+	    fill(this.color);
 		//this.y = this.y + random(-1,1);	
 		//this.x = this.x + random(-1,1);	
 		
