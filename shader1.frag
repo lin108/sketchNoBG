@@ -87,7 +87,7 @@ void main()
     
      //col = col * 0.5;
      if(col.r > 0.0 ){
-         col = vec3(0.94,0.94,0.94);
+         col = vec3(0.96,0.96,0.96);
      }else{
          col = vec3(1,1,1);
      }

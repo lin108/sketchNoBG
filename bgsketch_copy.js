@@ -73,7 +73,7 @@ function preload(){
 	theShader0 = loadShader('shader1.vert', 'shader1.frag');
 	//Shader
 	theShader = new p5.Shader(this.renderer,vert,frag);
-	Img = loadImage('light.jpg');
+	Img = loadImage('purple.jpg');
 
 }
 
@@ -145,11 +145,13 @@ function draw() {
 
 	theShader.setUniform('u_resolution',[width/1000,height/1000])
 	theShader.setUniform('u_time',millis()/1000)
-	theShader.setUniform('u_mouse',[mouseX/width,mouseY/height])
 	theShader.setUniform('tex0',WebglCanvas)
 	WebglCanvas2.shader(theShader)
 	// webGLGraphics2.rect(00,width,height)
 	WebglCanvas2.rect(-width/2,-height/2,width,height)
+
+
+
 	
 	
 	//shader 
@@ -194,25 +196,50 @@ function draw() {
 
 			//let index = i - minFreq;
 			let index = maxFreq - i;
-			let intensity = (spectrum[i] - spectrum[1000])*2;
+			let intensity = (spectrum[i] - spectrum[500])*3;
 			let intensityX= map(intensity,0,100,0.5,5);
+
+			
 			
 
 			if(intensity>150){
 				
-			historygram.stroke(255-intensity,255-intensity,255-intensity);
+			let transp = map(intensity,150,255,0,100);
+			historygram.stroke(intensity/3,intensity/3,intensity/3,transp);
+			//historygram.stroke(intensity,intensity,ntensity,transp);
 
-			let y = index / (maxFreq - minFreq - 1) * height/2;
+			let y = index / (maxFreq - minFreq - 1) * height;
 
 			historygram.line(vx-2+intensityX,y, vx+intensityX,y);
 			//historygram.line(vx,y+3, vx+1,y); //1 
 			
-			if(intensity>200){
+			if(intensity>240){
+				//historygram.stroke(255-intensity,255-intensity,255-intensity,transp);
+				historygram.stroke(intensity,intensity,intensity,transp/3);
+
+				let y = index / (maxFreq - minFreq - 1) * height;
+
+				historygram.line(vx-20+intensityX,y, vx+intensityX,y);
+				historygram.noStroke();
+
+				historygram.fill(255,255,255,transp/5);
+				let widthhis = map(intensity,240,255,1,3);
+				historygram.rect(vx,y,widthhis,8);
+
+				let radius = map(intensity,240,255,5,1);
+			
+				historygram.ellipse(vx,y,widthhis);
+				
+
+				/*
 				let intensityY = map(i,900,1073,0,height);
 				historygram.line(vx,0, vx,intensityY);
+				*/
 			}
-		
 		}
+
+
+
 		}
 
 
@@ -282,14 +309,18 @@ function draw() {
 
   function keyPressed() {
 
-	if (mic.isPlaying()) {
-	  // .isPlaying() returns a boolean
-	  mic.stop();
-	} else {
-	  mic.play();
-	  mic.amp(1);
-	 // mic.loop();
+	if (keyCode === LEFT_ARROW) {
+		if (mic.isPlaying()) {
+			// .isPlaying() returns a boolean
+			mic.stop();
+		  } else {
+			mic.play();
+			mic.amp(1);
+		   // mic.loop();
+		  }
 	}
+
+	
 
   }
   
