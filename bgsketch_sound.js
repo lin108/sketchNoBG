@@ -155,11 +155,11 @@ function draw() {
 //	pop ();
 
 
-		let vx= 5;
+		vx=vx+5;
 			
 		spectrum = fft.analyze();
 
-		historygram.image(historygram, -vx,0);
+
 		for (let i = maxFreq; i >= minFreq; i--) {
 			
 			//var high = fft.getEnergy(2400);
@@ -176,7 +176,7 @@ function draw() {
 
 			let y = index / (maxFreq - minFreq - 1) * height/2;
 
-			historygram.line(historygram.width-vx,y, historygram.width,y);
+			historygram.line(vx-2+intensityX,y, vx+intensityX,y);
 			//historygram.line(vx,y+3, vx+1,y); //1 
 			
 			if(intensity>200){
@@ -188,20 +188,15 @@ function draw() {
 		}
 
 
-		image(historygram, 100,0, width, height);
-
-		if(frameCount %200 == 0){
-			historygram.clear(0,0);
-		}
-		
+	
 
 
 
 
 
 
-		//image(historygram, windowWidth-vx,0);
-		//image(historygram, windowWidth-vx,height/2);
+		image(historygram, windowWidth-vx,0);
+		image(historygram, windowWidth-vx,height/2);
 
 
 

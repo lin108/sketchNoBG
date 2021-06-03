@@ -1,5 +1,10 @@
 let startCanvas;
 
+//guasiian
+let gauCanvas;
+let gauShader;
+
+
 //shader
 let theShader;
 let Img;
@@ -13,9 +18,6 @@ let scriptGlitch;
 let scriptCanvas;
 let dialogp = []; //popup
 let dialogs = []; //move
-
-
-
 
 
 
@@ -72,6 +74,10 @@ function preload(){
 	theShader = loadShader('shader1.vert', 'shader1.frag');
 	Img = loadImage('light.jpg');
 
+	//Shader
+	gauShader = loadShader('shader1.vert', 'gaushader.frag');
+
+
 }
 
 
@@ -90,6 +96,11 @@ function setup() {
     WebglCanvas = createGraphics(windowWidth,windowHeight,WEBGL);
 	pixelDensity(1);
 	noStroke();
+
+	gauCanvas = createGraphics(windowWidth,windowHeight,WEBGL);
+	pixelDensity(1);
+	noStroke();
+
     
 	mic= loadSound("noise1min.mp3");
 	historygram = createGraphics(windowWidth*5,height);
@@ -141,6 +152,7 @@ function draw() {
 		// rect gives us some geometry on the screen
 		WebglCanvas.rect(0,0,width, height);
 		image(WebglCanvas,0,0);	
+		
   
   
 	startCanvas.textSize(16);
@@ -150,16 +162,14 @@ function draw() {
 	//image(startCanvas,0,0);
 	//clear(0,0,width*2,height)
 
-	//push ();
-	
-//	pop ();
 
+		//historygram.background(100);
 
-		let vx= 5;
+		vx=vx+5;
 			
 		spectrum = fft.analyze();
 
-		historygram.image(historygram, -vx,0);
+		
 		for (let i = maxFreq; i >= minFreq; i--) {
 			
 			//var high = fft.getEnergy(2400);
@@ -169,32 +179,33 @@ function draw() {
 			let intensity = (spectrum[i] - spectrum[500])*2;
 			let intensityX= map(intensity,0,100,0.5,5);
 			
-
+			/* previous design 点和线
 			if(intensity>150){
 				
 			historygram.stroke(255-intensity,255-intensity,255-intensity);
 
 			let y = index / (maxFreq - minFreq - 1) * height/2;
 
-			historygram.line(historygram.width-vx,y, historygram.width,y);
+			historygram.line(vx-2+intensityX,y, vx+intensityX,y);
 			//historygram.line(vx,y+3, vx+1,y); //1 
 			
 			if(intensity>200){
 				let intensityY = map(i,900,1073,0,height);
 				historygram.line(vx,0, vx,intensityY);
 			}
-		
+		} 
+		*/
+
+		// thick
+		if(intensity>150){
+			historygram.fill(255-intensity,255-intensity,255-intensity);
+			historygram.rect(vx*2,height/2,10,100);
 		}
+
+
+
+
 		}
-
-
-		image(historygram, 100,0, width, height);
-
-		if(frameCount %200 == 0){
-			historygram.clear(0,0);
-		}
-		
-
 
 
 
@@ -202,6 +213,16 @@ function draw() {
 
 		//image(historygram, windowWidth-vx,0);
 		//image(historygram, windowWidth-vx,height/2);
+
+
+		// gauShader
+		gauShader.setUniform("iResolution", [width, height]);
+		gauShader.setUniform("tex",historygram);
+		gauCanvas.shader(gauShader);
+		gauCanvas.rect(windowWidth,0,5*windowWidth, height);
+		image(gauCanvas,windowWidth-vx+10,0);
+
+		
 
 
 
