@@ -1,3 +1,8 @@
+let overAlltexture;
+let texture1;
+let texture2;
+
+
 let startCanvas;
 
 //shader
@@ -14,9 +19,6 @@ let scriptGlitch;
 let scriptCanvas;
 let dialogp = []; //popup
 let dialogs = []; //move
-
-
-
 
 
 
@@ -65,6 +67,11 @@ let chFont;
 
 
 function preload(){
+	overAlltexture = loadImage('texture.png');
+	texture1=loadImage("texture1.png")
+	texture2=loadImage("texture2.png")
+
+
 	enFont=loadFont('Font/Menlo-Regular.ttf');
 	chFont=loadFont("Font/I.BMing-3.500.ttf");
 	cloud1img = loadImage("cloud1.png");
@@ -214,20 +221,25 @@ function draw() {
 			//historygram.line(vx,y+3, vx+1,y); //1 
 			
 			if(intensity>240){
-				//historygram.stroke(255-intensity,255-intensity,255-intensity,transp);
+
+
 				historygram.stroke(intensity,intensity,intensity,transp/3);
+
+			
 
 				let y = index / (maxFreq - minFreq - 1) * height;
 
 				historygram.line(vx-20+intensityX,y, vx+intensityX,y);
 				historygram.noStroke();
 
-				historygram.fill(255,255,255,transp/5);
+				historygram.fill(255,255,255,transp/8);
+			
+
 				let widthhis = map(intensity,240,255,1,3);
 				historygram.rect(vx,y,widthhis,8);
 
-				let radius = map(intensity,240,255,5,1);
-			
+	
+				historygram.fill(255,255,255,transp/6);
 				historygram.ellipse(vx,y,widthhis);
 				
 
@@ -238,8 +250,6 @@ function draw() {
 			}
 		}
 
-
-
 		}
 
 
@@ -248,8 +258,23 @@ function draw() {
 
 	image(WebglCanvas2,0,0,width,height);
 
+	push()
+	//blendMode(HARD_LIGHT)
+	blendMode(DIFFERENCE)
+	// image(texture1,0,0,width,height)
+	image(texture1,0,0,width,height)
+	// image(texture1,0,0,width,height)
+	blendMode(DARKEST)
+	image(texture2,0,0,width+random(-100,100),height)
+
+	pop()
+
+	
 	image(historygram, windowWidth-vx,0);
 	image(historygram, windowWidth-vx,height/2);
+	
+
+	
 	
 
 
@@ -279,25 +304,31 @@ function draw() {
 		fill(255);
 
 		//glitch();
+	
+	
+		image(overAlltexture,0,0,width,height);
+	
+		script();
+		image(scriptCanvas,0,0);
+
+		if(frameCount%15 == 0){
+			return;
+		}
+		else{
+			scriptCanvas.clear(0,0,width,height);
+		}
+		
 
 	
-	script();
-	image(scriptCanvas,0,0);
 
-	if(frameCount%15 == 0){
-		return;
-	}
-	else{
-		scriptCanvas.clear(0,0,width,height);
-	}
-	
-
-	
-	
 
 	if(frameCount%100>80 && frameCount%100<95){
 		glitch1();
 	}
+
+
+	
+	
 
 
 }
