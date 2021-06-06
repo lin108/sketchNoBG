@@ -205,50 +205,119 @@ function draw() {
 			let index = maxFreq - i;
 			let intensity = (spectrum[i] - spectrum[500])*3;
 			let intensityX= map(intensity,0,100,0.5,5);
-
-			
 			
 
-			if(intensity>150){
-				
-			let transp = map(intensity,150,255,0,100);
-			historygram.stroke(intensity/3,intensity/3,intensity/3,transp);
-			//historygram.stroke(intensity,intensity,ntensity,transp);
+			if(frameCount % 10 < 5)
+			{
 
-			let y = index / (maxFreq - minFreq - 1) * height;
+		
 
-			historygram.line(vx-2+intensityX,y, vx+intensityX,y);
-			//historygram.line(vx,y+3, vx+1,y); //1 
-			
-			if(intensity>240){
+				if(intensity>150){
+					
+				let transp = map(intensity,150,255,0,100);
+				let widthhis = map(intensity,240,255,1,3);
+				historygram.stroke(intensity/3,intensity/3,intensity/3,transp);
+				//historygram.stroke(intensity,intensity,ntensity,transp);
 
-
-				historygram.stroke(intensity,intensity,intensity,transp/3);
-
-			
+				//red
+				historygram.stroke(166,146,197,50);
 
 				let y = index / (maxFreq - minFreq - 1) * height;
 
-				historygram.line(vx-20+intensityX,y, vx+intensityX,y);
-				historygram.noStroke();
-
-				historygram.fill(255,255,255,transp/8);
-			
-
-				let widthhis = map(intensity,240,255,1,3);
-				historygram.rect(vx,y,widthhis,8);
-
-	
-				historygram.fill(255,255,255,transp/6);
-				historygram.ellipse(vx,y,widthhis);
+				historygram.line(vx-2+intensityX,y, vx+intensityX,y);
+				//historygram.line(vx,y+3, vx+1,y); //1 
 				
+					if(intensity>240){
 
-				/*
-				let intensityY = map(i,900,1073,0,height);
-				historygram.line(vx,0, vx,intensityY);
-				*/
+						historygram.stroke(intensity,intensity,intensity,transp/3);
+
+						let y = index / (maxFreq - minFreq - 1) * height;
+
+						//historygram.line(vx-widthhis+intensityX,y, vx+intensityX,y);
+						historygram.noStroke();
+
+
+						//let color = map(intensity/3,-200,100,-100,100);
+						let colorR = 87 + random(-50,100);
+						let colorG = 59 + random(10,50);
+						let colorB = 155 + random(-30,30);
+
+					
+
+						historygram.fill(colorR,colorG,colorB,5);
+						historygram.rect(vx,y,widthhis,2);
+
+						historygram.fill(colorR,colorG,colorB,2);
+						historygram.ellipse(vx,y,widthhis+6);
+
+						historygram.fill(colorR,colorG,colorB,4);
+						historygram.ellipse(vx,y,widthhis+3);
+
+						historygram.fill(colorR,colorG,colorB,10);
+						historygram.ellipse(vx,y,widthhis);
+						
+						
+
+				
+					}
+				}
+
 			}
-		}
+
+			else if(frameCount % 10 >= 5)
+			{
+				if(intensity>150){
+					
+					let transp = map(intensity,150,255,0,100);
+					historygram.stroke(intensity/3,intensity/3,intensity/3,transp);
+					let widthhis = map(intensity,240,255,1,3);
+					//historygram.stroke(intensity,intensity,ntensity,transp);
+	
+					//red
+					historygram.stroke(21,49,190,50);
+	
+					let y = index / (maxFreq - minFreq - 1) * height;
+	
+					historygram.line(vx-2+intensityX,y, vx+intensityX,y);
+					//historygram.line(vx,y+3, vx+1,y); //1 
+					
+						if(intensity>240){
+							let widthhis = map(intensity,240,255,1,3);
+	
+							historygram.stroke(intensity,intensity,intensity,transp/3);
+	
+							let y = index / (maxFreq - minFreq - 1) * height;
+	
+							//historygram.line(vx-widthhis+intensityX,y, vx+intensityX,y);
+							historygram.noStroke();
+	
+	
+							//let color = map(intensity/3,-200,100,-100,100);
+							let colorR = 94 + random(-50,100);
+							let colorG = 71 + random(10,50);
+							let colorB = 155 + random(-30,30);
+	
+						
+	
+							historygram.fill(colorR,colorG,colorB,5);
+							historygram.rect(vx,y,widthhis,2);
+	
+							historygram.fill(colorR,colorG,colorB,2);
+							historygram.ellipse(vx,y,widthhis+6);
+	
+							historygram.fill(colorR,colorG,colorB,4);
+							historygram.ellipse(vx,y,widthhis+3);
+	
+							historygram.fill(colorR,colorG,colorB,10);
+							historygram.ellipse(vx,y,widthhis-1);
+							
+	
+					
+						}
+				}
+
+			}
+
 
 		}
 

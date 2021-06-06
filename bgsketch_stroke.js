@@ -210,11 +210,12 @@ function draw() {
 			let high = fft.getEnergy(2400);
 			let low = fft.getEnergy(1000);
 			let intensity = high -low;
+			console.log(intensity);
 			
 
 			let lowWid = map(low,100,255,5,10);
 			
-			let intensityX = map(intensity,0,100,0.5,5);
+			let intensityX = map(intensity,100,200,0.5,5);
 			let transp = map(intensity,50,200,0,255);
 			let ellipseWid = map(intensity,240,255,10,25);
 
@@ -226,38 +227,39 @@ function draw() {
 			historygram.stroke(low,low,low,low/3);
 			historygram.line(vx+lowWid,y,vx,y);
 
-			if(intensity>180){
+			if(intensity>170){
 
 				let color = map(intensity,100,200,-100,100);
-				let colorR = 164 + color;
-				let colorG = 79 + color;
-				let colorB = 60 + color;
+				let colorR = 83 + color;
+				let colorG = 63 + color;
+				let colorB = 142 + color;
 				
 				//historygram.fill(random(15,200),transp,transp,transp/2);
 
 				historygram.fill(colorR,colorG,colorB);
-				historygram.rect(vx,y,intensityX/3,3);
+				historygram.ellipse(vx,y,intensityX/3,10);
+				historygram.ellipse(vx,y,2,intensityX);
 
-				if(intensity>190)
+				if(intensity>199)
 				{
-					/*
-					historygram.strokeWeight(intensityX);
-					historygram.stroke(255,255,255,intensity/2);
-					historygram.noFill();
-					historygram.bezier(vx, 0, vx-intensityX, height/2,vx+20,700,vx+intensityX, height);
-					*/
+					
 
 					//historygram.fill(255,255,255,transp/2);
-					historygram.fill(colorR,colorG,colorB);
-					//historygram.ellipse(vx,y2,ellipseWid,ellipseWid);
-					historygram.rect(vx,y2,ellipseWid,8);
+					historygram.fill(colorR-10,colorG+30,colorB+10);
 
+					//historygram.rect(vx,y2,ellipseWid,8);
 
+					historygram.ellipse(vx,y2,intensityX,30);
+					historygram.ellipse(vx,y2+random(10,20),10,intensityX*3);
 
 					// Particle system
 					//createParticles(vx);
 
 
+					if(intensity>210){
+						historygram.stroke(157,40,20);
+						//historygram.line(vx+4,0,vx,height);
+					}
 
 					
 				}
