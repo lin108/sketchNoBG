@@ -9,6 +9,7 @@ const frag = `
 	uniform mat3 uNormalMatrix;
 	uniform float u_pixelDensity;
 	uniform sampler2D tex0;
+	uniform sampler2D tex1;
 
 	//attributes, in
 	varying vec4 var_centerGlPosition;
@@ -23,30 +24,43 @@ const frag = `
 		vec3 color = vec3(0.);
 		float d = distance(u_mouse,st);
 
-		vec2 distorted_st = st;
-		distorted_st.x+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/5.+u_time/40.)*50.)+1.)*50.)/50.*(1.+u_mouse.x*1.5);
-		distorted_st.y+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/5.+u_time/20.)*50.)+1.)*100.)/50.*(1.+u_mouse.x*1.5);
-		distorted_st.x+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/20.+u_time/40.)*50.)+1.)*50.)/50.*(1.+u_mouse.x*1.5);
-		distorted_st.y+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/20.+u_time/20.)*50.)+1.)*100.)/50.*(1.+u_mouse.x*1.5);
-		distorted_st.x+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/2.+u_time/40.)*50.)+1.)*50.)/100.*(1.+u_mouse.x*1.5);
-		distorted_st.y+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/2.+u_time/20.)*50.)+1.)*100.)/100.*(1.+u_mouse.x*1.5);
-		distorted_st.x += sin(distorted_st.y*(50.+sin(st.x)*20.)+u_time)*distorted_st.y*distorted_st.y/500.;
 
-
-		color+=texture2D(tex0,distorted_st).rgb;
-        
-        //color.rgb=texture2D(color,distorted_st).rgb;
-        
-        //变黑
-		color*=color;
+		//材質
+		vec3 canvasTexture =  texture2D(tex1,mod(st*2.,1.)).rgb;
+		vec3 redBlueNoise1 = vec3(cnoise(vec3(st.x*6. + u_time/50.,st.y*4.+ u_time/50.,u_time/2.)),
+														 0,
+														 cnoise(vec3(st.x*6.+ u_time/50.,st.y*4.+ u_time/50.,u_time/2.+5000.))/3. );
+		vec3 redBlueNoise2 = vec3(cnoise(vec3(st.x*16. + u_time/80.,st.y*10.+ u_time/80.,u_time/2.)),
+														 0,
+														 cnoise(vec3(st.x*16.+ u_time/80.,st.y*10.+ u_time/80.,u_time/2.+5000.))/3. );
+		//紅色藍色噪聲
+		color += canvasTexture *canvasTexture * (redBlueNoise1+redBlueNoise2*0.2)*0.45 ;
 		
+		//從圖像層複製圖像，加上模糊filter
+		vec2 distorted_st = st;
+		distorted_st.x+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/10.+u_time/40.)*50.)+1.)*50.)/50.*(0.25+u_mouse.x*1.5);
+		distorted_st.y+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/10.+u_time/20.)*50.)+1.)*100.)/50.*(0.25+u_mouse.x*1.5);
+		distorted_st.x+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/25.+u_time/40.)*50.)+1.)*50.)/50.*(0.25+u_mouse.x*1.5);
+		distorted_st.y+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/25.+u_time/20.)*50.)+1.)*100.)/50.*(0.25+u_mouse.x*1.5);
+		distorted_st.x+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/5.+u_time/40.)*50.)+1.)*50.)/100.*(0.25+u_mouse.x*1.5);
+		// distorted_st.y+=cnoise(vec3(st.x*5000.,st.y*30000.,u_time))/(1.+(sin(sqrt(st.y/5.+u_time/20.)*50.)+1.)*100.)/100.*(0.25+u_mouse.x*1.5);
+		distorted_st.x += sin(distorted_st.y*(50.+sin(st.x)*20.)+u_time)*distorted_st.y*distorted_st.y/500.;
+		
+		//混成一部份原始圖像跟噪聲圖像
+		vec3 filteredGraphics = texture2D(tex0,distorted_st).rgb+texture2D(tex0,st).rgb*0.1;
+		color+=filteredGraphics;
+		
+		
+		
+		// color*=cnoise(vec3(st.x*0.1,st.y*0.1,u_time/10.))+0.8;
+		
+		//color*=vec3(60,30,36);
 		// color*=1.-d;
 		
-		//color.rgb=cnoise(vec3(st.x*5000.,st.y*3000.,u_time))+0.5;
+		// color*=cnoise(vec3(st.x*5000.,st.y*3000.,u_time))+0.5;
 		gl_FragColor= vec4(color,1.0);
 	}
 `
-
 
 
 

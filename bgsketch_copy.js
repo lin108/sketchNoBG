@@ -80,7 +80,7 @@ function preload(){
 	theShader0 = loadShader('shader1.vert', 'shader1.frag');
 	//Shader
 	theShader = new p5.Shader(this.renderer,vert,frag);
-	Img = loadImage('purple.jpg');
+	Img = loadImage('light.jpg');
 
 }
 
@@ -153,6 +153,7 @@ function draw() {
 	theShader.setUniform('u_resolution',[width/1000,height/1000])
 	theShader.setUniform('u_time',millis()/1000)
 	theShader.setUniform('tex0',WebglCanvas)
+	theShader.setUniform('tex1',Img)
 	WebglCanvas2.shader(theShader)
 	// webGLGraphics2.rect(00,width,height)
 	WebglCanvas2.rect(-width/2,-height/2,width,height)
@@ -167,8 +168,8 @@ function draw() {
 	theShader0.setUniform("iFrame", frameCount);
 	theShader0.setUniform('tex',Img)
 		// rect gives us some geometry on the screen
-		WebglCanvas.rect(0,0,width, height);
-		image(WebglCanvas,0,0);	
+	//	WebglCanvas.rect(0,0,width, height);
+	//	image(WebglCanvas,0,0);	
   
 
 
@@ -207,7 +208,7 @@ function draw() {
 			let intensityX= map(intensity,0,100,0.5,5);
 			
 
-			if(frameCount % 10 < 5)
+			if(frameCount % 10 < 3)
 			{
 
 		
@@ -220,7 +221,9 @@ function draw() {
 				//historygram.stroke(intensity,intensity,ntensity,transp);
 
 				//red
-				historygram.stroke(166,146,197,50);
+				historygram.stroke(218,18,32,50,80);
+
+	
 
 				let y = index / (maxFreq - minFreq - 1) * height;
 
@@ -238,9 +241,13 @@ function draw() {
 
 
 						//let color = map(intensity/3,-200,100,-100,100);
-						let colorR = 87 + random(-50,100);
-						let colorG = 59 + random(10,50);
-						let colorB = 155 + random(-30,30);
+
+						
+						let colorR = 176 + random(-50,100);
+						let colorG = 73 + random(10,50);
+						let colorB = 20 + random(-30,30);
+						
+					
 
 					
 
@@ -250,10 +257,10 @@ function draw() {
 						historygram.fill(colorR,colorG,colorB,2);
 						historygram.ellipse(vx,y,widthhis+6);
 
-						historygram.fill(colorR,colorG,colorB,4);
+						historygram.fill(colorR,colorG,colorB,3);
 						historygram.ellipse(vx,y,widthhis+3);
 
-						historygram.fill(colorR,colorG,colorB,10);
+						historygram.fill(colorR,colorG,colorB,4);
 						historygram.ellipse(vx,y,widthhis);
 						
 						
@@ -264,7 +271,68 @@ function draw() {
 
 			}
 
-			else if(frameCount % 10 >= 5)
+			else if (frameCount %10 >=3 && frameCount %10 <5)
+			{
+
+				if(intensity>150){
+					
+					let transp = map(intensity,150,255,0,100);
+					let widthhis = map(intensity,240,255,1,3);
+					historygram.stroke(intensity/3,intensity/3,intensity/3,transp);
+					//historygram.stroke(intensity,intensity,ntensity,transp);
+	
+					//red
+					historygram.stroke(67,43,86,60);
+	
+		
+	
+					let y = index / (maxFreq - minFreq - 1) * height;
+	
+					historygram.line(vx-2+intensityX,y, vx+intensityX,y);
+					//historygram.line(vx,y+3, vx+1,y); //1 
+					
+						if(intensity>240){
+	
+							historygram.stroke(intensity,intensity,intensity,transp/3);
+	
+							let y = index / (maxFreq - minFreq - 1) * height;
+	
+							//historygram.line(vx-widthhis+intensityX,y, vx+intensityX,y);
+							historygram.noStroke();
+	
+	
+							//let color = map(intensity/3,-200,100,-100,100);
+	
+							
+							let colorR = 176 + random(-50,100);
+							let colorG = 73 + random(10,50);
+							let colorB = 20 + random(-30,30);
+							
+						
+	
+						
+	
+							historygram.fill(colorR,colorG,colorB,5);
+							historygram.rect(vx,y,widthhis,2);
+	
+							historygram.fill(colorR,colorG,colorB,2);
+							historygram.ellipse(vx,y,widthhis+6);
+	
+							historygram.fill(colorR,colorG,colorB,3);
+							historygram.ellipse(vx,y,widthhis+3);
+	
+							historygram.fill(colorR,colorG,colorB,4);
+							historygram.ellipse(vx,y,widthhis);
+							
+							
+	
+					
+						}
+					}
+
+			}
+
+			else if (frameCount % 10 >= 5)
 			{
 				if(intensity>150){
 					
@@ -275,6 +343,7 @@ function draw() {
 	
 					//red
 					historygram.stroke(21,49,190,50);
+					
 	
 					let y = index / (maxFreq - minFreq - 1) * height;
 	
@@ -293,9 +362,12 @@ function draw() {
 	
 	
 							//let color = map(intensity/3,-200,100,-100,100);
-							let colorR = 94 + random(-50,100);
-							let colorG = 71 + random(10,50);
-							let colorB = 155 + random(-30,30);
+							
+							let colorR = 166 + random(-50,100);
+							let colorG = 106 + random(10,50);
+							let colorB = 67 + random(-30,30);
+							
+					
 	
 						
 	
@@ -305,10 +377,10 @@ function draw() {
 							historygram.fill(colorR,colorG,colorB,2);
 							historygram.ellipse(vx,y,widthhis+6);
 	
-							historygram.fill(colorR,colorG,colorB,4);
+							historygram.fill(colorR,colorG,colorB,3);
 							historygram.ellipse(vx,y,widthhis+3);
 	
-							historygram.fill(colorR,colorG,colorB,10);
+							historygram.fill(colorR,colorG,colorB,4);
 							historygram.ellipse(vx,y,widthhis-1);
 							
 	
@@ -330,9 +402,9 @@ function draw() {
 	push()
 	//blendMode(HARD_LIGHT)
 	blendMode(DIFFERENCE)
-	// image(texture1,0,0,width,height)
-	image(texture1,0,0,width,height)
-	// image(texture1,0,0,width,height)
+
+	//image(texture1,0,0,width,height)
+	
 	blendMode(DARKEST)
 	image(texture2,0,0,width+random(-100,100),height)
 
