@@ -1,3 +1,5 @@
+var playButton;
+
 let overAlltexture;
 let texture1;
 let texture2;
@@ -94,6 +96,12 @@ function setup() {
 	scriptCanvas = createGraphics(windowWidth,windowHeight);
 	pixelDensity(1);
 	noStroke();
+
+
+	//button
+	playButton = createButton("play");
+	playButton.mousePressed(togglePlaying);
+	playButton.position(50,20);
 
 
 	createCanvas(windowWidth, windowHeight);
@@ -282,7 +290,7 @@ function draw() {
 					//historygram.stroke(intensity,intensity,ntensity,transp);
 	
 					//red
-					historygram.stroke(67,43,86,60);
+					historygram.stroke(67,43,86,80);
 	
 		
 	
@@ -478,7 +486,7 @@ function draw() {
 
 
 
-
+/*
   function keyPressed() {
 
 	if (keyCode === LEFT_ARROW) {
@@ -492,9 +500,28 @@ function draw() {
 		  }
 	}
 
-	
+  }
+
+  */
+
+
+
+  function togglePlaying(){
+	  if(!mic.isPlaying()){
+		  mic.play();
+		  mic.amp(1);
+		  playButton.html("pause");
+		}
+		else{
+			mic.pause();
+			playButton.html("play");
+
+		}
 
   }
+
+
+
   
 
   function script(){
